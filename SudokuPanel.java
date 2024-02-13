@@ -83,11 +83,14 @@ public class SudokuPanel extends JPanel implements MouseListener{
     }
     
     public void mouseClicked(MouseEvent me){
-        cellClicked = true;
+
         int row = me.getY() / 50;
         int col = me.getX() / 50;
         cellX = col * 50;
         cellY = row * 50;
+        SudokuCell sc = sGrid[row][col];
+        boolean readOnly = sc.getReadOnly();
+        cellClicked = !readOnly;
         repaint();
     }
     public void initGrid(int num){
