@@ -21,7 +21,7 @@ public class SudokuPanel extends JPanel implements MouseListener{
     private int dimPixels;
     private final int numCells = 9;
     private boolean cellClicked;
-    private int[][] sGrid = new int[numCells][numCells];
+    private SudokuCell[][] sGrid = new SudokuCell[numCells][numCells];
     private Scanner s;
     private int cellX, cellY;
     public SudokuPanel(int size){
@@ -57,8 +57,10 @@ public class SudokuPanel extends JPanel implements MouseListener{
         }
         for (int i = 0; i < sGrid.length; i++){
             for (int j = 0; j < sGrid[i].length; j++){
-                if (sGrid[i][j] != 0){
-                    g.drawString(sGrid[i][j] + "",x,y);
+                SudokuCell sc = sGrid[i][j];
+                int val = sc.getVal();
+                if (val != 0){
+                    g.drawString(val + "",x,y);
                 }
                 x += cellSizeX;
             }
@@ -95,6 +97,11 @@ public class SudokuPanel extends JPanel implements MouseListener{
         String[] digitArray;
         File file = new File(fileName);
         int row = 0, col = 0;
+        for (int i = 0; i < sGrid.length; i++){
+            for (int j = 0; j < sGrid[i].length; j++){
+                sGrid[i][j] = new SudokuCell(0);
+            }
+        }
         try {
             s = new Scanner(file); 
             if (s != null){
@@ -107,7 +114,7 @@ public class SudokuPanel extends JPanel implements MouseListener{
                     for (int i = 0; i < digitArray.length; i++){
                         col = digitArray[i].charAt(0) - '0';
                         val = digitArray[i].charAt(2) - '0';
-                        sGrid[row][col] = val;
+                        sGrid[row][col] = new SudokuCell(val);
                     }
                 }
             }
@@ -122,10 +129,12 @@ public class SudokuPanel extends JPanel implements MouseListener{
     public void printGrid(){
         for (int i = 0; i < sGrid.length; i++){
             for (int j = 0; j < sGrid[i].length; j++){
-                if (sGrid[i][j] > 0 && sGrid[i][j] < 10){
-                    System.out.print(sGrid[i][j]);
+                SudokuCell sc = sGrid[i][j];
+                int val = sc.getVal();
+                if (val > 0 && val < 10){
+                    System.out.print(val);
                 }
-                else if (sGrid[i][j] == 0){
+                else if (val == 0){
                     System.out.print("_");
                 }
             }
