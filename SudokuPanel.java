@@ -2,8 +2,10 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Font;
 
 import java.io.File;
@@ -43,24 +45,31 @@ public class SudokuPanel extends JPanel implements MouseListener{
         addMouseListener(this);
     }
     public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
         int x = 15, y = 45;
         int height = getHeight();
         int width = getWidth();
         int cellSizeY = height / 9;
         int cellSizeX = width / 9;
         Font f = new Font("Arial",Font.BOLD,50);
-        g.setFont(f);
+        g2.setFont(f);
         if (cellClicked){
-            g.setColor(Color.YELLOW);
-            g.fillRect(cellX,cellY,50,50);
-            g.setColor(Color.BLACK);
+            g2.setColor(Color.YELLOW);
+            g2.fillRect(cellX,cellY,50,50);
+            g2.setColor(Color.BLACK);
         }
+        g2.setStroke(new BasicStroke(5));
+        g2.drawLine(0,150,450,150);
+        g2.drawLine(0,300,450,300);
+        g2.drawLine(150,0,150,450);
+        g2.drawLine(300,0,300,450);
         for (int i = 0; i < sGrid.length; i++){
             for (int j = 0; j < sGrid[i].length; j++){
                 SudokuCell sc = sGrid[i][j];
                 int val = sc.getVal();
                 if (val != 0){
-                    g.drawString(val + "",x,y);
+                    g2.drawString(val + "",x,y);
                 }
                 x += cellSizeX;
             }
