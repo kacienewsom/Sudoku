@@ -1,5 +1,6 @@
 import javax.swing.JFrame;
-public class Sudoku extends JFrame {
+
+public class Sudoku extends JFrame{
 
     public Sudoku(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -13,6 +14,4 @@ public class Sudoku extends JFrame {
         s.pack();
         s.setVisible(true);
     }
-
-
 }

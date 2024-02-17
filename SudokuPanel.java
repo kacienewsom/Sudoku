@@ -2,6 +2,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -19,7 +21,7 @@ import javax.swing.border.Border;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-public class SudokuPanel extends JPanel implements MouseListener{
+public class SudokuPanel extends JPanel implements MouseListener, KeyListener{
     private int dimPixels;
     private final int numCells = 9;
     private boolean cellClicked;
@@ -43,6 +45,8 @@ public class SudokuPanel extends JPanel implements MouseListener{
         }
         initGrid(24);        
         addMouseListener(this);
+        addKeyListener(this);
+        setFocusable(true);
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -98,10 +102,30 @@ public class SudokuPanel extends JPanel implements MouseListener{
         cellX = col * 50;
         cellY = row * 50;
         SudokuCell sc = sGrid[row][col];
+        sGrid[row][col].setEnabled(true);
         boolean readOnly = sc.getReadOnly();
         cellClicked = !readOnly;
         repaint();
     }
+    public void keyTyped(KeyEvent e){
+        char keyChar = e.getKeyChar();
+        int row = cellY / 50;
+        int col = cellX / 50;
+        boolean isReadOnly = sGrid[row][col].getReadOnly();
+        if (keyChar >= '1' && keyChar <= '9' && !isReadOnly){
+            int val = keyChar - '0';
+            sGrid[row][col].setVal(val);
+            repaint();
+        }
+        if (keyChar == KeyEvent.VK_BACK_SPACE && !isReadOnly){
+            sGrid[row][col].setVal(0);
+            repaint();
+        }
+                
+    }
+    public void keyReleased(KeyEvent ke){}
+    public void keyPressed(KeyEvent ke){}
+
     public void initGrid(int num){
         String fileName = "StartingGrids/Grid" + num;
         String str = new String();
