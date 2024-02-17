@@ -26,6 +26,7 @@ public class SudokuPanel extends JPanel implements MouseListener, KeyListener{
     private final int numCells = 9;
     private boolean cellClicked;
     private SudokuCell[][] sGrid = new SudokuCell[numCells][numCells];
+    private SudokuCell[][] solutionGrid;
     private Scanner s;
     private int cellX, cellY;
     public SudokuPanel(int size){
@@ -44,6 +45,7 @@ public class SudokuPanel extends JPanel implements MouseListener, KeyListener{
             this.add(myLabel);
         }
         initGrid(24);        
+        initSolutionGrid(24);
         addMouseListener(this);
         addKeyListener(this);
         setFocusable(true);
@@ -126,6 +128,32 @@ public class SudokuPanel extends JPanel implements MouseListener, KeyListener{
     public void keyReleased(KeyEvent ke){}
     public void keyPressed(KeyEvent ke){}
 
+    public void initSolutionGrid(int num){
+        String fileName = "Solutions/Grid" + num;
+        String str = new String();
+        File f = new File(fileName);
+        try {
+            s = new Scanner(f);
+            int row = 0;
+            solutionGrid = new SudokuCell[9][9];
+            if (s != null){
+                while (s.hasNextLine()){
+                    str = s.nextLine();
+                    for (int col = 0; col < str.length(); col++){
+                        int val = (int) str.charAt(col) - '0';
+                        solutionGrid[row][col] = new SudokuCell(val);
+                    }
+                    row++;
+                }
+            }
+        }
+        catch (FileNotFoundException fnfe){
+            System.out.println("File not found");
+        }
+        finally {
+            s.close();
+        }
+    }
     public void initGrid(int num){
         String fileName = "StartingGrids/Grid" + num;
         String str = new String();
